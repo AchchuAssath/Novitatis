@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang ="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Ratings</title>
+
+ <link rel="stylesheet" href="Get4ce/font-awesome5/web/css/all.css">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style >
+	.stars-outer{
+		position: relative;
+		display:inline-block;
+	}
+
+	.stars-inner{
+		position:absolute;
+		top:0;
+		white-space: nowrap;
+		overflow: hidden;
+		width:0;
+	}
+
+	.stars-outer ::before{
+		content: "\f005 \f005 \f005 \f005 \f005 ";
+		font-family: 'Font Awesome 5 Free';
+		font-weight: 900;
+		color: #ccc;
+	}
+
+	.stars-inner ::before{
+		content: "\f005 \f005 \f005 \f005 \f005 ";
+		font-family: 'Font Awesome 5 Free';
+		font-weight: 900;
+		color: #f1e107;
+	}
+
+
+
+</style>
+
+
+</head>
+
+<body>
+	<div class="container mt-5">
+  <div class="form-group">
+    <select id="product-select" class="form-control custom-select">
+        <option value="0" disabled selected>Select Farmer</option>
+        <option value="name1">Name 1</option>
+        <option value="name2">Name 2</option>
+        <option value="name3">Name 3</option>
+        <option value="name4">Name 4</option>
+        <option value="name5">Name 5</option>
+      </select>
+  </div>
+  <div class="form-group">
+    <input type="number" id="rating-control" class="form-control" step="0.1" max="5" placeholder="Rate 1 - 5" disabled>
+  </div>
+
+
+	<div class="container">
+		<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>NAME</th>
+        <th>RATING</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="name1">
+        <td>Name 1</td>
+        <td>
+          <div class="stars-outer">
+            <div class="stars-inner"></div>
+          </div>
+          <span class="number-rating"></span>
+        </td>
+      </tr>
+      <tr class="name2">
+        <td>Name 2</td>
+        <td>
+          <div class="stars-outer">
+            <div class="stars-inner"></div>
+          </div>
+          <span class="number-rating"></span>
+        </td>
+      </tr>
+      <tr class="name3">
+        <td>Name 3</td>
+        <td>
+          <div class="stars-outer">
+            <div class="stars-inner"></div>
+          </div>
+          <span class="number-rating"></span>
+        </td>
+      </tr>
+      <tr class="name4">
+        <td>Name 4</td>
+        <td>
+          <div class="stars-outer">
+            <div class="stars-inner"></div>
+          </div>
+          <span class="number-rating"></span>
+        </td>
+      </tr>
+      <tr class="name5">
+        <td>Name 5</td>
+        <td>
+          <div class="stars-outer">
+            <div class="stars-inner"></div>
+          </div>
+          <span class="number-rating"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+	</div>
+
+	<script>
+		// Initial Ratings
+    const ratings = {
+      name1: 4.7,
+      name2: 3.4,
+      name3: 3.4,
+      name4: 2.3,
+      name5: 3.6,
+    
+    }
+
+    // Total Stars
+    const starsTotal = 5;
+
+    // Run getRatings when DOM loads
+    document.addEventListener('DOMContentLoaded', getRatings);
+
+    // Form Elements
+    const productSelect = document.getElementById('product-select');
+    const ratingControl = document.getElementById('rating-control');
+
+    // Init product
+    let product;
+
+    // Product select change
+    productSelect.addEventListener('change', (e) => {
+      product = e.target.value;
+      // Enable rating control
+      ratingControl.disabled = false;
+      ratingControl.value = ratings[product];
+    });
+
+    // Rating control change
+    ratingControl.addEventListener('blur', (e) => {
+      const rating = e.target.value;
+
+      // Make sure 5 or under
+      if(rating > 5) {
+        alert('Please rate 1 - 5');
+        return;
+      }
+
+      // Change rating
+      ratings[product] = rating;
+
+      getRatings();
+    });
+
+    // Get ratings
+    function getRatings() {
+      for (let rating in ratings) {
+        // Get percentage
+        const starPercentage = (ratings[rating] / starsTotal) * 100;
+
+        // Round to nearest 10
+        const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
+
+        // Set width of stars-inner to percentage
+        document.querySelector(`.${rating} .stars-inner`).style.width = starPercentageRounded;
+
+        // Add number rating
+        document.querySelector(`.${rating} .number-rating`).innerHTML = ratings[rating];
+      }
+    }
+	</script>
+</body>
+</html>
